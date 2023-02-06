@@ -10,9 +10,9 @@ Original file is located at
 from bs4 import BeautifulSoup
 import urllib.request
 
-url = 'http://www.tarsylia.com/tales-of-tarsylia-chapter01-xun/'
+url = 'http://www.tarsylia.com/tales-of-tarsylia-chapter-24-taiyang/'
 page = urllib.request.urlopen(url)
-soup = BeautifulSoup(page)
+soup = BeautifulSoup(page,features="html.parser")
 
 def is_next(tag):
   try:
@@ -24,18 +24,18 @@ def get_next_page_url(soup):
   tag = soup.find(is_next)
   return(tag['href'])
 
-search_depth = 12
+search_depth = 168
 for i in range(search_depth):
   try:
-    img_src = new_soup.img['src']
+    img_src = soup.img['src']
     name = img_src.split('/')[-1]
     print(name)
-    urllib.request.urlretrieve(img_src,name)
-    next_url = get_next_page_url(new_soup)
+    urllib.request.urlretrieve(img_src,'content/book3/'+name)
+    next_url = get_next_page_url(soup)
     page = urllib.request.urlopen(next_url)
-    new_soup = BeautifulSoup(page)
+    soup = BeautifulSoup(page,features="html.parser")
   except:
     print(next_url)
-    next_url = get_next_page_url(new_soup)
+    next_url = get_next_page_url(soup)
     page = urllib.request.urlopen(next_url)
-    new_soup = BeautifulSoup(page)
+    soup = BeautifulSoup(page,features="html.parser")
